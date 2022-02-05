@@ -21,6 +21,7 @@ func UserValidate(user _entity.User) error {
 		Email:    user.Email,
 		Address:  user.Address,
 		Password: user.Password,
+		Role:     user.Role,
 	}
 	err := v.Struct(user_validate)
 	if err != nil {
