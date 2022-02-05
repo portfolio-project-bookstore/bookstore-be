@@ -14,8 +14,11 @@ type BaseResponseNonData struct {
 }
 
 type BaseResponseWithData struct {
-	BaseResponse BaseResponseNonData
-	Data         interface{} `json:"data"`
+	Meta struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	} `json:"meta"`
+	Data interface{} `json:"data"`
 }
 
 func SuccessNonDataResponse(c echo.Context, message string) error {
@@ -28,8 +31,8 @@ func SuccessNonDataResponse(c echo.Context, message string) error {
 
 func SuccessWithDataResponse(c echo.Context, message string, data interface{}) error {
 	response := BaseResponseWithData{}
-	response.BaseResponse.Meta.Code = http.StatusOK
-	response.BaseResponse.Meta.Message = message
+	response.Meta.Code = http.StatusOK
+	response.Meta.Message = message
 	response.Data = data
 
 	return c.JSON(http.StatusOK, response)
