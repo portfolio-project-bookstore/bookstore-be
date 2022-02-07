@@ -9,7 +9,7 @@ import (
 func RegisterPath(e *echo.Echo, uc *_user.UserController) {
 
 	// route users
-	e.POST("/users", uc.Create())
+	e.POST("/signup", uc.Create())
 	e.GET("/users", uc.GetAll())
 	e.GET("/users/:id", uc.GetById())
 	e.PUT("/users/:id", uc.Update())
