@@ -13,10 +13,10 @@ import (
 )
 
 type UserController struct {
-	user_repo _user.User
+	user_repo _user.UserInterface
 }
 
-func New(user _user.User) *UserController {
+func New(user _user.UserInterface) *UserController {
 	return &UserController{user_repo: user}
 }
 

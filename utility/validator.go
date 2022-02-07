@@ -23,8 +23,26 @@ func UserValidate(user _entity.User) error {
 		Password: user.Password,
 		Role:     user.Role,
 	}
-	err := v.Struct(user_validate)
-	if err != nil {
+
+	if err := v.Struct(user_validate); err != nil {
+		return err
+	}
+	return nil
+}
+
+type SigninValidator struct {
+	Username string `validate:"required"`
+	Password string `validate:"required"`
+}
+
+func SigninValidate(data_signin _entity.User) error {
+	v := validator.New()
+	signin_validate := SigninValidator{
+		Username: data_signin.Username,
+		Password: data_signin.Password,
+	}
+
+	if err := v.Struct(signin_validate); err != nil {
 		return err
 	}
 	return nil

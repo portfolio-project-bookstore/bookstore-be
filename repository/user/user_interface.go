@@ -2,7 +2,7 @@ package user
 
 import _entity "bookstore/entity"
 
-type User interface {
+type UserInterface interface {
 	Create(new_user _entity.User) (_entity.User, error)
 	GetAll() ([]_entity.User, error)
 	GetById(id int) (_entity.User, int, error)
