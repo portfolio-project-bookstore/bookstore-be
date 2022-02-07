@@ -2,9 +2,11 @@ package main
 
 import (
 	_config "bookstore/config"
+	_ac "bookstore/delivery/controller/auth"
 	_uc "bookstore/delivery/controller/user"
 	_middleware "bookstore/delivery/middleware"
 	_route "bookstore/delivery/route"
+	_ar "bookstore/repository/auth"
 	_ur "bookstore/repository/user"
 	_utility "bookstore/utility"
 	"fmt"
@@ -20,6 +22,8 @@ func main() {
 	db := _utility.InitDB(config)
 	user_repo := _ur.New(db)
 	user_controller := _uc.New(user_repo)
+	auth_repo := _ar.New(db)
+	auth_controller := _ac.New(auth_repo)
 
 	e := echo.New()
 	e.Pre(_middleware.CustomLogger())
@@ -28,6 +32,6 @@ func main() {
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 	}))
 
-	_route.RegisterPath(e, user_controller)
+	_route.RegisterPath(e, user_controller, auth_controller)
 	log.Fatal(e.Start(fmt.Sprintf(":%d", config.Port)))
 }
