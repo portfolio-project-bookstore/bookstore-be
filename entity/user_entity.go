@@ -11,5 +11,4 @@ type User struct {
 	Role      string
 	CreatedAt time.Time `gorm:"autoCreateTime"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
-	Book      []Book
 }

@@ -10,10 +10,10 @@ import (
 
 const secret = "RahasiaBanget"
 
-func CreateToken(user_id int, role string) (string, error) {
+func CreateToken(userId int, role string) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
-	claims["user_id"] = user_id
+	claims["userId"] = userId
 	claims["role"] = role
 	claims["exp"] = time.Now().Add(time.Hour * 5).Unix()
 

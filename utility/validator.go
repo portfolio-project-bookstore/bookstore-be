@@ -47,3 +47,29 @@ func SigninValidate(data_signin _entity.User) error {
 	}
 	return nil
 }
+
+type BookValidator struct {
+	Title       string `validate:"required"`
+	Category    string `validate:"required"`
+	Author      string `validate:"required"`
+	Description string `validate:"required"`
+	Price       int    `validate:"required,gte=1"`
+	Stock       int    `validate:"required,gte=1"`
+}
+
+func BookValidate(book _entity.Book) error {
+	v := validator.New()
+	book_validate := BookValidator{
+		Title:       book.Title,
+		Category:    book.Category,
+		Author:      book.Author,
+		Description: book.Description,
+		Price:       book.Price,
+		Stock:       book.Stock,
+	}
+
+	if err := v.Struct(book_validate); err != nil {
+		return err
+	}
+	return nil
+}
