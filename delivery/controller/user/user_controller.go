@@ -76,7 +76,7 @@ func (uc UserController) GetById() echo.HandlerFunc {
 func (uc UserController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if valid := _middleware.ValidateToken(c); !valid {
-			return _controller.ErrorResponse(c, http.StatusUnauthorized, "access forbidden")
+			return _controller.ErrorResponse(c, http.StatusUnauthorized, "unauthorized")
 		}
 
 		id, err := strconv.Atoi(c.Param("id"))
@@ -107,7 +107,7 @@ func (uc UserController) Update() echo.HandlerFunc {
 func (uc UserController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if valid := _middleware.ValidateToken(c); !valid {
-			return _controller.ErrorResponse(c, http.StatusUnauthorized, "access forbidden")
+			return _controller.ErrorResponse(c, http.StatusUnauthorized, "unauthorized")
 		}
 
 		id, err := strconv.Atoi(c.Param("id"))
