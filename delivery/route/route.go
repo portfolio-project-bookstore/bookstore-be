@@ -22,4 +22,5 @@ func RegisterPath(e *echo.Echo, uc *_user.UserController, ac *_auth.AuthControll
 
 	// route books
 	e.POST("/books", bc.Create(), _middleware.JWTMiddleware())
+	e.GET("/books", bc.GetAll())
 }

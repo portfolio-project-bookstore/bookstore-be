@@ -42,3 +42,19 @@ func (bc BookController) Create() echo.HandlerFunc {
 		return _controller.SuccessNonDataResponse(c, "success operation")
 	}
 }
+
+func (bc BookController) GetAll() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		books, err := bc.book_repo.GetAll()
+		if err != nil {
+			return _controller.ErrorResponse(c, http.StatusInternalServerError, "failed to get data")
+		} else if len(books) == 0 {
+			return _controller.ErrorResponse(c, http.StatusNotFound, "data not found")
+		}
+		var book_response []BookResponseFormat
+		for _, value := range books {
+			book_response = append(book_response, FormattingBookResponse(value))
+		}
+		return _controller.SuccessWithDataResponse(c, "success operation", book_response)
+	}
+}
