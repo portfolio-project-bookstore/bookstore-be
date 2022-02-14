@@ -83,7 +83,10 @@ func (uc UserController) Update() echo.HandlerFunc {
 		if err != nil {
 			return _controller.ErrorResponse(c, http.StatusBadRequest, "invalid id")
 		}
-		_, len_user, err := uc.user_repo.GetById(id)
+		user, len_user, err := uc.user_repo.GetById(id)
+		if id != int(user.ID) {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "access forbidden")
+		}
 		if err != nil {
 			return _controller.ErrorResponse(c, http.StatusInternalServerError, "failed to get data")
 		} else if len_user == 0 {
@@ -114,7 +117,10 @@ func (uc UserController) Delete() echo.HandlerFunc {
 		if err != nil {
 			return _controller.ErrorResponse(c, http.StatusBadRequest, "invalid id")
 		}
-		_, len_user, err := uc.user_repo.GetById(id)
+		user, len_user, err := uc.user_repo.GetById(id)
+		if id != int(user.ID) {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "access forbidden")
+		}
 		if err != nil {
 			return _controller.ErrorResponse(c, http.StatusInternalServerError, "failed to get data")
 		} else if len_user == 0 {
