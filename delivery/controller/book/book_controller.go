@@ -110,7 +110,7 @@ func (bc BookController) Update() echo.HandlerFunc {
 			return _controller.ErrorResponse(c, http.StatusBadRequest, "data can't be empty")
 		}
 		if _, err := bc.book_repo.Update(id, update_book); err != nil {
-			return _controller.ErrorResponse(c, http.StatusInternalServerError, "email or password already exist")
+			return _controller.ErrorResponse(c, http.StatusInternalServerError, "internal server error")
 		}
 		return _controller.SuccessNonDataResponse(c, "success operation")
 	}
