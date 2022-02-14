@@ -8,6 +8,7 @@ import (
 	_utility "bookstore/utility"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -55,6 +56,25 @@ func (bc BookController) GetAll() echo.HandlerFunc {
 		for _, value := range books {
 			book_response = append(book_response, FormattingBookResponse(value))
 		}
+		return _controller.SuccessWithDataResponse(c, "success operation", book_response)
+	}
+}
+
+func (bc BookController) GetById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "invalid id")
+		}
+
+		book, len_book, err := bc.book_repo.GetById(id)
+		if err != nil {
+			return _controller.ErrorResponse(c, http.StatusInternalServerError, "failed to get data")
+		} else if len_book == 0 {
+			return _controller.ErrorResponse(c, http.StatusNotFound, "data not found")
+		}
+
+		book_response := FormattingBookResponse(book)
 		return _controller.SuccessWithDataResponse(c, "success operation", book_response)
 	}
 }
