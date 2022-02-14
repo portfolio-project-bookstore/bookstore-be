@@ -26,7 +26,7 @@ func (ar *AuthRepository) Signin(data_signin _entity.User) (string, error) {
 		return "", nil
 	}
 
-	token, err := _middleware.CreateToken(int(data_signin.ID), data_signin.Role)
+	token, err := _middleware.CreateToken(int(user.ID), user.Role)
 	if err != nil {
 		return "", err
 	}

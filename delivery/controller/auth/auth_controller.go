@@ -32,8 +32,8 @@ func (ac AuthController) Signin() echo.HandlerFunc {
 
 		token, err := ac.auth_repo.Signin(data_signin)
 		if err != nil || token == "" {
-			return _controller.ErrorResponse(c, http.StatusBadRequest, "login failed")
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "signin failed")
 		}
-		return _controller.SuccessWithDataResponse(c, "login success", token)
+		return _controller.SuccessWithDataResponse(c, "signin success", token)
 	}
 }

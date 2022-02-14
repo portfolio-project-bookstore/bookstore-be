@@ -12,5 +12,5 @@ type Book struct {
 	Stock       int
 	CreatedAt   time.Time `gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `gorm:"autoUpdateTime"`
-	UsersID     uint
+	UsersID     uint      `gorm:"default:NULL"`
 }

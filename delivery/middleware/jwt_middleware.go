@@ -25,7 +25,7 @@ func ExtractTokenId(e echo.Context) (uint, string) {
 	users := e.Get("user").(*jwt.Token)
 	if users.Valid {
 		claims := users.Claims.(jwt.MapClaims)
-		user_id := claims["user_id"].(float64)
+		user_id := claims["userId"].(float64)
 		role := claims["role"].(string)
 		return uint(user_id), role
 	}
