@@ -6,7 +6,6 @@ import (
 	_entity "bookstore/entity"
 	_book "bookstore/repository/book"
 	_utility "bookstore/utility"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -31,8 +30,6 @@ func (bc BookController) Create() echo.HandlerFunc {
 			return _controller.ErrorResponse(c, http.StatusBadRequest, "data can't be empty")
 		}
 		id_user, role := _middleware.ExtractTokenId(c)
-		fmt.Println("role", role)
-		fmt.Println("id_user", id_user)
 		new_book.UsersID = id_user
 		if role != "supplier" {
 			return _controller.ErrorResponse(c, http.StatusBadRequest, "you are not supplier")
@@ -76,5 +73,45 @@ func (bc BookController) GetById() echo.HandlerFunc {
 
 		book_response := FormattingBookResponse(book)
 		return _controller.SuccessWithDataResponse(c, "success operation", book_response)
+	}
+}
+
+func (bc BookController) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if valid := _middleware.ValidateToken(c); !valid {
+			return _controller.ErrorResponse(c, http.StatusUnauthorized, "unauthorized")
+		}
+
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "invalid id")
+		}
+
+		// cek apakah buku yang diupdate ada atau tidak
+		book, len_book, err := bc.book_repo.GetById(id)
+		if err != nil {
+			return _controller.ErrorResponse(c, http.StatusInternalServerError, "failed to get data")
+		} else if len_book == 0 {
+			return _controller.ErrorResponse(c, http.StatusNotFound, "data not found")
+		}
+
+		// cek user yang akan mengupdate buku adalah supplier dan pemilik buku
+		id_user, role := _middleware.ExtractTokenId(c)
+		if book.UsersID != id_user || role != "supplier" {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "access forbidden")
+		}
+
+		// update buku
+		update_book := _entity.Book{}
+		if err := c.Bind(&update_book); err != nil {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "invalid data request")
+		}
+		if err := _utility.BookValidate(update_book); err != nil {
+			return _controller.ErrorResponse(c, http.StatusBadRequest, "data can't be empty")
+		}
+		if _, err := bc.book_repo.Update(id, update_book); err != nil {
+			return _controller.ErrorResponse(c, http.StatusInternalServerError, "email or password already exist")
+		}
+		return _controller.SuccessNonDataResponse(c, "success operation")
 	}
 }
